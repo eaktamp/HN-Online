@@ -71,6 +71,8 @@
                       $sqlwait = "SELECT * FROM patient WHERE txtHN = 0";
                       $resultwait = $conn->query($sqlwait);
                       $numwait = $resultwait->num_rows;
+
+             
                       ?>
 
                 <div class="d-grid ">
@@ -131,8 +133,14 @@
                                                         ?>
                         </td>
                         <td>
+
+                        <?php
+                                     $pp = $conn->query("SELECT * FROM prename WHERE prename_id = '".$row['txtPrename']."' ");
+                                     $rowPP = $pp->fetch_assoc();
+                                     $prename = $rowPP['prename_name'];
+                        ?>
                           <a href="#" class="text-decoration-none text-dark">
-                            <?php echo $row['txtPrename'] . $row['txtName'] . " " . $row['txtLname']; ?>
+                            <?php echo $prename . $row['txtName'] . " " . $row['txtLname']; ?>
                           </a>
                         </td>
                         <td class="text-center">

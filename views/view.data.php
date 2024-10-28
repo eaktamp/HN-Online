@@ -45,43 +45,74 @@
 
                 <?php
 
-                // error_reporting(0);
-                // $txtPrename = $_POST['txtPrename'];
-                // $txtName = $_POST['txtName'];
-                // $txtLname = $_POST['txtLname'];
-                // $txtGender = $_POST['txtGender'];
-                // $txtStatus = $_POST['txtStatus'];
-                // $txtBd = $_POST['txtBd'];
-                // $txtBm = $_POST['txtBm'];
-                // $txtBy = $_POST['txtBy'];
-                // $txtCid = $_POST['txtCid'];
-                // $txtNationality = $_POST['txtNationality'];
-                // $txtEmail = $_POST['txtEmail'];
-                // $txtReligion = $_POST['txtReligion'];
-                // $txtOccupation = $_POST['txtOccupation'];
-                // $txtEducation = $_POST['txtEducation'];
-                // $txtName2 = $_POST['txtName2'];
-                // $txtLname2 = $_POST['txtLname2'];
-                // $txtNameDad = $_POST['txtNameDad'];
-                // $txtLnameDad = $_POST['txtLnameDad'];
-                // $txtNameMom = $_POST['txtNameMom'];
-                // $txtLnameMom = $_POST['txtLnameMom'];
-                // $txtNo = $_POST['txtNo'];
-                // $txtMo = $_POST['txtMo'];
-                // $txtAlley = $_POST['txtAlley'];
-                // $txtSubDistrict = $_POST['txtSubDistrict'];
-                // $txtDistrict = $_POST['txtDistrict'];
-                // $txtProvince = $_POST['txtProvince'];
-                // $txtPostCode = $_POST['txtPostCode'];
-                // $txtTel = $_POST['txtTel'];
+
+
 
                 $id = $_GET['id'];
 
+
+
+
+
+
                 $sql = "SELECT * FROM patient WHERE txtCID = '" . $id . "' ";
+
                 $result = $conn->query($sql);
                 while ($row = $result->fetch_assoc()) {
 
+                  $txtPrename = $row['txtPrename'];
+                  // $txtName = $row['txtName'];
+                  // $txtLname = $row['txtLname'];
+                  // $txtGender = $row['txtGender'];
+                  $txtStatus = $row['txtStatus'];
+                  // $txtBd = $row['txtBd'];
+                  // $txtBm = $row['txtBm'];
+                  // $txtBy = $row['txtBy'];
+                  // $txtCid = $row['txtCid'];
+                  $txtNationality = $row['txtNationality'];
+                  // $txtEmail = $row['txtEmail'];
+                  $txtReligion = $row['txtReligion'];
+                  // $txtOccupation = $row['txtOccupation'];
+                  $txtEducation = $row['txtEducation'];
+                  // $txtName2 = $row['txtName2'];
+                  // $txtLname2 = $row['txtLname2'];
+                  // $txtNameDad = $row['txtNameDad'];
+                  // $txtLnameDad = $row['txtLnameDad'];
+                  // $txtNameMom = $row['txtNameMom'];
+                  // $txtLnameMom = $row['txtLnameMom'];
+                  // $txtNo = $row['txtNo'];
+                  // $txtMo = $row['txtMo'];
+                  // $txtAlley = $row['txtAlley'];
+                  // $txtSubDistrict = $row['txtSubDistrict'];
+                  // $txtDistrict = $row['txtDistrict'];
+                  // $txtProvince = $row['txtProvince'];
+                  // $txtPostCode = $row['txtPostCode'];
+                  // $txtTel = $row['txtTel'];
+
+
+
+                  $p = $conn->query("SELECT * FROM prename WHERE prename_id = '" . $txtPrename . "' ");
+                  $rowP = $p->fetch_assoc();
+                   $prename = $rowP['prename_name'];
+
+                  $s = $conn->query("SELECT * FROM status WHERE status_id = '" . $txtStatus . "' ");
+                  $rowS = $s->fetch_assoc();
+                   $status = $rowS['status_name'];
+
+                  $n = $conn->query("SELECT * FROM nation WHERE nation_id = '" . $txtNationality . "' ");
+                  $rowN = $n->fetch_assoc();
+                   $nation = $rowN['nation_name'];
+
+                  $r = $conn->query("SELECT * FROM reg WHERE reg_id = '" . $txtReligion . "' ");
+                  $rowR = $r->fetch_assoc();
+                   $reg = $rowR['reg_name'];
+
+                  $e = $conn->query("SELECT * FROM edu WHERE edu_id = '" . $txtEducation . "' ");
+                  $rowE = $e->fetch_assoc();
+                   $edu = $rowE['edu_name'];
+
                 ?>
+
 
                   <form action="add.hn.php" method="POST">
 
@@ -103,13 +134,19 @@
                         <label for="basic-url" class="form-label">คำนำหน้าชื่อ</label> <label class="text-danger"> *</label>
                         <div class="input-group mb-2">
                           <select name="txtPrename" class="form-select" aria-label="Default select example">
-                            <option selected value="<?php echo $row['txtPrename']; ?>"><?php echo $row['txtPrename']; ?></option>
-                            <option value="นาย">นาย</option>
-                            <option value="นาง">นาง</option>
-                            <option value="นางสาว">นางสาว</option>
-                            <option value="ด.ช.">ด.ช.</option>
-                            <option value="ด.ญ.">ด.ญ.</option>
-                          </select>
+                            <option selected value="<?php echo $txtPrename; ?>"><?php echo $prename; ?></option>
+                          
+                              <?php
+                               $pp = $conn->query("SELECT * FROM prename"); 
+                              while ($rowPrename = $pp->fetch_assoc()) {
+                              ?>
+                                <option value="<?php echo $rowPrename['prename_id']; ?>">
+                                  <?php echo $rowPrename['prename_name'] . "<br>"; ?>
+                                </option>
+                              <?php
+                              }
+                              ?>
+                            </select>
                         </div>
                       </div>
 
@@ -142,19 +179,26 @@
                         </div>
                       </div>
 
-                      <!--                         
-                        <div class="col-md-2 mb-2">
-                          <label for="basic-url" class="form-label">เพศ</label>
-                          <div class="input-group mb-2">
-                            <input name="txtGender"  type="text" value="<?php echo $row['txtGender']; ?>" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-                          </div> 
-                        </div> -->
+  
 
 
                       <div class="col-md-4 mb-2">
-                        <label for="basic-url" class="form-label">สถานภาพ</label>
+                        <label for="basic-url" class="form-label">สถานะภาพ</label> <label class="text-danger"> *</label>
                         <div class="input-group mb-2">
-                          <input name="txtStatus" type="text" value="<?php echo $row['txtStatus']; ?>" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                          <select name="txtStatus" class="form-select" aria-label="Default select example">
+                            <option selected value="<?php echo $txtStatus; ?>"><?php echo $status; ?></option>
+                          
+                              <?php
+                               $ss = $conn->query("SELECT * FROM status"); 
+                              while ($rowStatus = $ss->fetch_assoc()) {
+                              ?>
+                                <option value="<?php echo $rowStatus['status_id']; ?>">
+                                  <?php echo $rowStatus['status_name'] . "<br>"; ?>
+                                </option>
+                              <?php
+                              }
+                              ?>
+                            </select>
                         </div>
                       </div>
 
@@ -221,15 +265,42 @@ echo getThaiMonth($bm);
                       </div>
 
                       <div class="col-md-3 mb-2">
-                        <label for="basic-url" class="form-label">สัญชาติ</label>
+                        <label for="basic-url" class="form-label">สัญชาติ</label> <label class="text-danger"> *</label>
                         <div class="input-group mb-2">
-                          <input name="txtNationality" type="text" value="<?php echo $row['txtNationality']; ?>" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                          <select name="txtNationality" class="form-select" aria-label="Default select example">
+                            <option selected value="<?php echo $txtNationality; ?>"><?php echo $nation; ?></option>
+                          
+                              <?php
+                               $pp = $conn->query("SELECT * FROM nation"); 
+                              while ($rowNation = $pp->fetch_assoc()) {
+                              ?>
+                                <option value="<?php echo $rowNation['nation_id']; ?>">
+                                  <?php echo $rowNation['nation_name'] . "<br>"; ?>
+                                </option>
+                              <?php
+                              }
+                              ?>
+                            </select>
                         </div>
                       </div>
+
                       <div class="col-md-3 mb-2">
-                        <label for="basic-url" class="form-label">ศาสนา</label>
+                        <label for="basic-url" class="form-label">ศาสนา</label> <label class="text-danger"> *</label>
                         <div class="input-group mb-2">
-                          <input name="txtReligion" type="text" value="<?php echo $row['txtReligion']; ?>" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                          <select name="txtReligion" class="form-select" aria-label="Default select example">
+                            <option selected value="<?php echo $txtReligion; ?>"><?php echo $reg; ?></option>
+                          
+                              <?php
+                               $rr = $conn->query("SELECT * FROM reg"); 
+                              while ($rowReg = $rr->fetch_assoc()) {
+                              ?>
+                                <option value="<?php echo $rowReg['reg_id']; ?>">
+                                  <?php echo $rowReg['reg_name'] . "<br>"; ?>
+                                </option>
+                              <?php
+                              }
+                              ?>
+                            </select>
                         </div>
                       </div>
 
@@ -250,9 +321,22 @@ echo getThaiMonth($bm);
                       </div>
 
                       <div class="col-md-6 mb-2">
-                        <label for="basic-url" class="form-label">วุฒิการศึกษา</label>
+                        <label for="basic-url" class="form-label">วุฒิการศึกษา</label> <label class="text-danger"> *</label>
                         <div class="input-group mb-2">
-                          <input name="txtEducation" type="text" value="<?php echo $row['txtEducation']; ?>" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                          <select name="txtEducation" class="form-select" aria-label="Default select example">
+                            <option selected value="<?php echo $txtEducation; ?>"><?php echo $edu; ?></option>
+                          
+                              <?php
+                               $ee = $conn->query("SELECT * FROM edu"); 
+                              while ($rowEdu = $ee->fetch_assoc()) {
+                              ?>
+                                <option value="<?php echo $rowEdu['edu_id']; ?>">
+                                  <?php echo $rowEdu['edu_name'] . "<br>"; ?>
+                                </option>
+                              <?php
+                              }
+                              ?>
+                            </select>
                         </div>
                       </div>
 
