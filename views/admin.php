@@ -1,5 +1,3 @@
-<?php session_start(); ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,15 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 
   <?php
-  require_once './vendor/autoload.php'; // path ของไฟล ืautoload.php ใน vendor
-  $dotenv = Dotenv\Dotenv::createImmutable('./'); //path ที่เก็บ ไฟล์ .env
+  require_once './vendor/autoload.php';
+  $dotenv = Dotenv\Dotenv::createImmutable('./');
   $dotenv->load();
-  include("connect.php"); ?>
-  <!-- Auto Refresh -->
-  <!-- <meta http-equiv="refresh" content="1" >  -->
+  include("connect/connect.php"); ?>
 
   <title>HN Online</title>
 </head>
@@ -30,15 +26,16 @@
           <img src="img/ABH-LOGO-WHITE.png" alt="" style="width:20%; margin-top:-80px; margin-bottom:-30px;">
 
 
-        </div>
 
+        </div>
+        <a href="/hn-online/adduseradmin">
+                            <div class="btn text-warning bg-dark"><i class="fa fa-user"></i> Add User</div>
+                          </a>
+        <div class="rounded text-white fs-4 fw-bold" style="text-align: right; "><?php echo "Login : " . $_SESSION['username']; ?></div>
         <!-- box center -->
         <div class="col-lg-3 mb-5 mb-lg-0 position-relative">
 
         </div>
-
-
-
 
 
 
@@ -47,11 +44,10 @@
           <div id="radius-shape-2" class="position-absolute shadow-5-strong "></div>
 
           <div class="card bg-glass">
-            <div class="card-body px-4 py-5 px-md-4 bg-white" style="widtah:900px;">
+            <div class="card-body px-4 py-5 px-md-4 bg-white">
 
 
               <?php
-
 
 
               if (!isset($_SESSION['admin']) || $_SESSION['admin'] == '0') {
@@ -118,10 +114,11 @@
                           if ($hn == 0) {
                           ?><button class="btn btn-warning">รออนุมัติ</button><?php
                                                                             } else {
-                                                                              ?><button class="btn btn-block  btn-success"><?php echo $row['txtHN']; ?></button><?php
-                                                                                                                                                              }
-                                                                                                                                                              $i++;
-                                                                                                                                                                ?>
+                                                                              ?><button class="btn btn-block  btn-success"><?php echo $row['txtHN']; ?></button>
+                          <?php
+                                                                            }
+                                                                            $i++;
+                          ?>
                         </td>
                         <td class="col-1 text-center">
                           <link href="/your-path-to-uicons/css/uicons-[your-style].css" rel="stylesheet"> <!--load all styles -->
@@ -143,13 +140,13 @@
                         </td>
                         <td class="col-2 text-center">
                           <?php  ?>
-                          <a href="view.data.php?id=<?php echo $row['txtCid']; ?>">
+                          <a href="/hn-online/view.data?id=<?php echo $row['txtCid']; ?>">
                             <div class="btn btn-primary"><i class="fa fa-edit"></i> แก้ไข</div>
                           </a>
 
-                          <a href="delete.data.php?id=<?php echo $row['txtCid']; ?>">
-                            <div class="btn btn-danger"><i class="fa fa-trash"></i> ลบ</div>
-                          </a>
+                          <button class="btn btn-danger delete-btn" data-id="<?php echo $row['txtCid']; ?>" data-csrf="<?php echo $_SESSION['csrf_token']; ?>">
+                            <i class="fa fa-trash"></i> ลบ
+                          </button>
                         </td>
 
                       </tr>
@@ -159,18 +156,12 @@
                   <?php } ?>
                 </table>
                 <center>
-                  <!-- <input type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-danger btn-block mt-3" onclick="history.back();" value="กลับสู่หน้าหลัก" style="margin-top:-50px"> -->
-                  <div class="mt-5" style="margin-bottom:-30px;"> <input type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-danger btn-block" onclick="location.href='logout.php'" value="ออกจากระบบ" style="margin-top:-50px">
+                  <div class="mt-5" style="margin-bottom:-30px;"> <input type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-danger btn-block" onclick="location.href='/hn-online/logout'" value="ออกจากระบบ" style="margin-top:-50px">
 
                 </center>
               <?php
                     }
               ?>
-
-
-
-
-
 
             </div>
           </div>
@@ -183,9 +174,45 @@
     </div>
     </div>
   </section>
-  <!-- Section: Design Block -->
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+   $(document).on('click', '.delete-btn', function() {
+      const id = $(this).data('id');
+      const csrfToken = $(this).data('csrf');
 
+      Swal.fire({
+         title: 'คุณแน่ใจหรือไม่?',
+         text: "การลบข้อมูลนี้จะไม่สามารถกู้คืนได้!",
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'ใช่, ลบเลย!'
+      }).then((result) => {
+         if (result.isConfirmed) {
+            $.ajax({
+               url: '/hn-online/delete_patient',
+               type: 'POST',
+               data: { id: id, csrf_token: csrfToken },
+               success: function(response) {
+                  if (response.success) {
+                     Swal.fire('ลบสำเร็จ!', 'ข้อมูลถูกลบเรียบร้อยแล้ว', 'success').then(() => {
+                        location.reload();
+                     });
+                  } else {
+                     Swal.fire('เกิดข้อผิดพลาด!', response.message, 'error');
+                  }
+               },
+               error: function() {
+                  Swal.fire('เกิดข้อผิดพลาด!', 'ไม่สามารถลบข้อมูลได้', 'error');
+               }
+            });
+         }
+      });
+   });
+</script>
 
 
 </body>
