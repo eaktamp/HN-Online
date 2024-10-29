@@ -234,16 +234,13 @@ document.addEventListener("DOMContentLoaded", function() {
                         $('body').append(form);
                         form.submit();
                     } else {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: '',
-                            text: response.message,
-                            confirmButtonText: 'ตกลง',
-                            customClass: {
-                                title: 'fw-bold',
-                                content: 'h6',
-                            }
-                        });
+                      $('#modalBody').html(`
+                                  <div class="text-center">
+                                      <div class="fw-bold h4 text-success"><i class="fa fa-exclamation-triangle text-warning"></i> สถานะการลงทะเบียน ขอเลข HN Online </div>
+                                      <div class="fw-bold mt-3 h2 text-success">สถานะ : ${response.message}</div>
+                                  </div>
+                              `);
+                              $('#resultModal').modal('show');
                     }
                 }
             },
