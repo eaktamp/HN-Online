@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 
   <?php
   require_once './vendor/autoload.php'; // path ของไฟล ืautoload.php ใน vendor
   $dotenv = Dotenv\Dotenv::createImmutable('./'); //path ที่เก็บ ไฟล์ .env
   $dotenv->load();
-  include("connect.php"); ?>
+  include("connect/connect.php"); ?>
   <title>HN Online</title>
 </head>
 
@@ -91,7 +91,7 @@
                                                         ?><div class="fw-normal h4"><?php echo "ทำการลบข้อมูล "; ?></div><?php
                                                                       ?><div class="fw-normal h2 text-primary"><?php echo $txtCid; ?></div><?php
                                                                         ?><div class="fw-normal"><?php echo "เรียบร้อยแล้ว"; ?></div><?php
-                                                                ?><div class="mt-5" style="margin-bottom:-30px;"> <input type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-danger btn-block" onclick="location.href='admin.php'" value="กลับสู่หน้าหลัก" style="margin-top:-50px"><?php
+                                                                ?><div class="mt-5" style="margin-bottom:-30px;"> <input type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-danger btn-block" onclick="location.href='/hn-online/admin'" value="กลับสู่หน้าหลัก" style="margin-top:-50px"><?php
 
                                                                                                                                                                                                                                         }
 

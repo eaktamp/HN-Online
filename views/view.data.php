@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 
   <?php
   require_once './vendor/autoload.php'; // path ของไฟล ืautoload.php ใน vendor
   $dotenv = Dotenv\Dotenv::createImmutable('./'); //path ที่เก็บ ไฟล์ .env
   $dotenv->load();
-  include("connect.php"); ?>
+  include("connect/connect.php"); ?>
   <title>HN Online</title>
 </head>
 
@@ -211,38 +211,39 @@
                       <div class="col-md-2 mb-0">
                         <label for="basic-url" class="form-label">เดือนเกิด</label>
                         <div class="input-group mb-2">
-                          <?php
-                          $bm = $row['txtBm'];
-                          $thaiMonths = [
-                            1 => 'มกราคม',
-                            2 => 'กุมภาพันธ์',
-                            3 => 'มีนาคม',
-                            4 => 'เมษายน',
-                            5 => 'พฤษภาคม',
-                            6 => 'มิถุนายน',
-                            7 => 'กรกฎาคม',
-                            8 => 'สิงหาคม',
-                            9 => 'กันยายน',
-                            10 => 'ตุลาคม',
-                            11 => 'พฤศจิกายน',
-                            12 => 'ธันวาคม'
-                          ];
+                        <?php
+$bm = isset($row['txtBm']) ? $row['txtBm'] : null;
+$thaiMonths = [
+  1 => 'มกราคม',
+  2 => 'กุมภาพันธ์',
+  3 => 'มีนาคม',
+  4 => 'เมษายน',
+  5 => 'พฤษภาคม',
+  6 => 'มิถุนายน',
+  7 => 'กรกฎาคม',
+  8 => 'สิงหาคม',
+  9 => 'กันยายน',
+  10 => 'ตุลาคม',
+  11 => 'พฤศจิกายน',
+  12 => 'ธันวาคม'
+];
 
-                          // Function to get Thai month name from number
-                          function getThaiMonth($bm)
-                          {
-                            global $thaiMonths;
+// Function to get Thai month name from number
+function getThaiMonth($bm)
+{
+  global $thaiMonths;
 
-                            // Check if the month number is valid
-                            if (array_key_exists($bm, $thaiMonths)) {
-                              return $thaiMonths[$bm];
-                            } else {
-                              return 'Invalid month number';
-                            }
-                          }
+  // Check if $bm is not null and is a valid month number
+  if (!is_null($bm) && array_key_exists($bm, $thaiMonths)) {
+    return $thaiMonths[$bm];
+  } else {
+    return 'Invalid month number';
+  }
+}
 
-
-                          ?>
+// Output the Thai month name
+echo getThaiMonth($bm);
+?>
                           <input name="txtBm" type="text" value="<?php echo getThaiMonth($bm); ?>" class="form-control" id="basic-url" aria-describedby="basic-addon3">
                         </div>
                       </div>
